@@ -30,11 +30,11 @@ def _modify_group(idx, single_band_bytes, offset):
                 or (single_band_bytes[(tag_num*12) + (idx+2):(tag_num*12) + (idx+4)] == bytearray(b'%\x88')):
 
             _shift_bytes(idx, single_band_bytes, offset, tag_num)
-            _modify_group(0, single_band_bytes[struct.unpack('i',
-                                                             single_band_bytes[
-                                                             (tag_num*12) + (idx+2) + 8:
-                                                             (tag_num*12) + (idx+2) + 12
-                                                             ])[0]:],
+            _modify_group(struct.unpack('i', single_band_bytes[
+                                                              (tag_num*12) + (idx+2) + 8:
+                                                              (tag_num*12) + (idx+2) + 12
+                                                              ])[0],
+                          single_band_bytes,
                           offset)
 
         # Check if tag is a pointer, and change offset if it is:
@@ -65,7 +65,7 @@ def parse_xmp(xmp_data):
     return [str(i) for i in range(5)], [name[-1] for name in band_names], [wave[-1] for wave in central_waves], [fwhm[-1] for fwhm in wave_fwhms]
 
 
-def split_5band_tif(input_folder, output_folder, output_dtype):
+def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=False):
 
     if not output_folder:
         output_folder = input_folder
@@ -99,6 +99,9 @@ def split_5band_tif(input_folder, output_folder, output_dtype):
                 modify_exif_pointers(single_band_bytes, left_offset)
                 single_bands_bytes.append(single_band_bytes)
 
+        if delete_originals:
+            os.remove(os.path.join(input_folder, multi_band_file))
+
         for folder_name, single_band_file in zip(folder_names, single_bands_bytes):
             with open(os.path.join(output_folder, folder_name, "".join([multi_band_file.split('.')[0], "_", "_".join(folder_name.split('-')[2:]), '.tif'])), 'wb') as f:
                 f.write(single_band_file)
@@ -121,6 +124,9 @@ if __name__ == '__main__':
     optional.add_argument('--output_dtype', choices=['uint16', 'float32', 'pack12'], default='pack12',
                           help='Data type of the output rasters. Options are unsigned 16-bit, 32-bit floating point, '
                                'and packed 12-bit. Defaults to packed 12-bit.')
+    optional.add_argument('--delete_originals', action='store_true',
+                          help="Deletes original 5-band images after splitting them. Useful to avoid bloating one's "
+                               "hard drive.")
 
     args = parser.parse_args()
 
