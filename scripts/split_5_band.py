@@ -9,6 +9,7 @@ import argparse
 from time import time
 
 IMX265_IMAGE_OFFSETS = [0x00000000, 0x00484000, 0x00908000, 0x00d8c000, 0x01210000]
+IMX265_IMAGE_SIZE = 23674880
 
 
 def _shift_bytes(idx, single_band_bytes, offset, tag_num):
@@ -95,7 +96,7 @@ def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=
 
             # Ensure input is 5-band Sentera file:
             multi_band_size = os.path.getsize(os.path.join(input_folder, multi_band_file))
-            if multi_band_size != 23674880:
+            if multi_band_size != IMX265_IMAGE_SIZE:
                 raise ValueError('Input TIF may not be 5-band, or may not be in Sentera multiband format. If this is '
                                  'an error, contact Sentera support.')
 
