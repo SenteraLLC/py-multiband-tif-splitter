@@ -58,11 +58,16 @@ def modify_exif_pointers(single_band_bytes, offset):
 
 def parse_xmp(xmp_data):
 
-    band_names = re.findall("<Camera:BandName>\n( *|\t)<rdf:Seq>\n( *|\t)<rdf:li>([A-Za-z]+)", xmp_data)
-    central_waves = re.findall("<Camera:CentralWavelength>\n( *|\t)<rdf:Seq>\n( *|\t)<rdf:li>([0-9]+)", xmp_data)
-    wave_fwhms = re.findall("<Camera:WavelengthFWHM>\n( *|\t)<rdf:Seq>\n( *|\t)<rdf:li>([0-9]+)", xmp_data)
+    band_names = re.findall("<Camera:BandName>\n(?: *|\t)<rdf:Seq>\n(?: *|\t)<rdf:li>([A-Za-z]+)", xmp_data)
+    central_waves = re.findall("<Camera:CentralWavelength>\n(?: *|\t)<rdf:Seq>\n(?: *|\t)<rdf:li>([0-9]+)", xmp_data)
+    wave_fwhms = re.findall("<Camera:WavelengthFWHM>\n(?: *|\t)<rdf:Seq>\n(?: *|\t)<rdf:li>([0-9]+)", xmp_data)
 
-    return [str(i) for i in range(5)], [name[-1] for name in band_names], [wave[-1] for wave in central_waves], [fwhm[-1] for fwhm in wave_fwhms]
+    # Make sure XMP matches conform
+    if any(not xmp_type for xmp_type in [band_names, central_waves, wave_fwhms]):
+        raise ValueError('Input TIF files do not appear to conform to Sentera specification. If this is an error, '
+                         'contact Sentera support.')
+
+    return [str(i) for i in range(5)], band_names, central_waves, wave_fwhms
 
 
 def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=False):
@@ -88,10 +93,15 @@ def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=
     for multi_band_file in [file for file in os.listdir(input_folder) if file.lower().endswith('.tif')]:
         with open(os.path.join(input_folder, multi_band_file), 'rb') as multi_band:
 
+            # Ensure input is 5-band Sentera file:
+            multi_band_size = os.path.getsize(os.path.join(input_folder, multi_band_file))
+            if multi_band_size != 23674880:
+                raise ValueError('Input TIF may not be 5-band, or may not be in Sentera multiband format. If this is '
+                                 'an error, contact Sentera support.')
+
             single_bands_bytes = []
             for left_offset, right_offset in zip(IMX265_IMAGE_OFFSETS,
-                                                 (IMX265_IMAGE_OFFSETS +
-                                                  [os.path.getsize(os.path.join(input_folder, multi_band_file))])[1:]):
+                                                 (IMX265_IMAGE_OFFSETS + [multi_band_size])[1:]):
 
                 multi_band.seek(left_offset)
                 single_band_bytes = bytearray(multi_band.read(right_offset - left_offset))
