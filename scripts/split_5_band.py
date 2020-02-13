@@ -89,6 +89,8 @@ def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=
 
         if not os.path.exists(os.path.join(output_folder, folder_name)):
             os.makedirs(os.path.join(output_folder, folder_name))
+        elif os.path.exists(os.path.join(output_folder, folder_name)) and os.listdir(os.path.join(output_folder, folder_name)):
+            raise PermissionError('Single band files already present in output directory. Exiting to avoid overwriting.')
 
     # Loop through all 5-band tifs in input folder:
     for multi_band_file in [file for file in os.listdir(input_folder) if file.lower().endswith('.tif')]:
