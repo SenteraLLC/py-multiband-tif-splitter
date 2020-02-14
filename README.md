@@ -17,7 +17,7 @@ The "split_5_band.py" script can be called from the command line by navigating t
 These options are as follows:
 
 |    Command Flag                    |               Usage                     |
-| -------------------                | --------------------------------------- |
+| -------------------------------    | --------------------------------------- |
 |  **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. **Required** argument.   |
 | **--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored. Each band will be stored in its                                          own subfolder within the specified folder. Default location is the specified input folder.      |
 |     **--delete_originals**         |Deletes original 5-band images after splitting them. Useful to avoid bloating one's hard drive." |
