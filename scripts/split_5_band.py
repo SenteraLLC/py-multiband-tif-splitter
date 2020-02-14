@@ -71,17 +71,22 @@ def parse_xmp(xmp_data):
     return [str(i) for i in range(5)], band_names, central_waves, wave_fwhms
 
 
-def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=False):
+def split_5band_tif(input_folder, output_folder, delete_originals=False):
 
+    # Verify input and output folders:
     if not output_folder:
         output_folder = input_folder
+
+    multi_band_files = [file for file in os.listdir(input_folder) if file.lower().endswith('.tif')]
+    if not multi_band_files:
+        raise FileNotFoundError('No TIF files present in input directory.')
 
     # Determine folder names from XMP:
     with open(os.path.join(input_folder, random.choice(os.listdir(input_folder))), 'r', encoding='mbcs') as xmp_data_file:
         xmp_data = xmp_data_file.read()
         imager_num, band_name, central_wave, wave_fwhm = parse_xmp(xmp_data)
 
-    # Make directories:
+    # Make output directories:
     folder_names = []
     for folder_parts in zip(imager_num, band_name, central_wave, wave_fwhm):
         folder_name = "-".join(folder_parts)
@@ -93,7 +98,7 @@ def split_5band_tif(input_folder, output_folder, output_dtype, delete_originals=
             raise PermissionError('Single band files already present in output directory. Exiting to avoid overwriting.')
 
     # Loop through all 5-band tifs in input folder:
-    for multi_band_file in [file for file in os.listdir(input_folder) if file.lower().endswith('.tif')]:
+    for multi_band_file in multi_band_files:
         with open(os.path.join(input_folder, multi_band_file), 'rb') as multi_band:
 
             # Ensure input is 5-band Sentera file:
@@ -134,9 +139,6 @@ if __name__ == '__main__':
                           help='Path to folder where the individual band images will be stored. Each band will be '
                                'stored in its own subfolder within the specified folder. Default location is within the'
                                ' specified input folder.')
-    optional.add_argument('--output_dtype', choices=['uint16', 'float32', 'pack12'], default='pack12',
-                          help='Data type of the output rasters. Options are unsigned 16-bit, 32-bit floating point, '
-                               'and packed 12-bit. Defaults to packed 12-bit.')
     optional.add_argument('--delete_originals', action='store_true',
                           help="Deletes original 5-band images after splitting them. Useful to avoid bloating one's "
                                "hard drive.")
