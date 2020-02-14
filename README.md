@@ -7,8 +7,8 @@ The splitting functionality in this repository can be used one of two ways:
 * By running the "Sentera Multiband Splitting Tool.exe" standalone executable
 
 ## Requriements:
-* **script**: Windows, OSX, or Linux system with Python 3 or higher
-* **executable**: Windows system (no Python necessary)
+* **Script**: Windows, OSX, or Linux system with Python 3 or higher
+* **Executable**: Windows system (no Python necessary)
 
 ### Script Usage:
 The "split_5_band.py" script can be called from the command line by navigating to its file location and running
@@ -16,21 +16,11 @@ The "split_5_band.py" script can be called from the command line by navigating t
   
 These options are as follows:
 
-|    Command Flag        |               Usage                     |
-| -------------------    | --------------------------------------- |
-|  **--input_folder**    | Path to folder of 5-band .tif files to  | 
-|      FOLDER_PATH       |     be split into individual bands.     |
-|                        |           **Required** argument.        |
-|---------------------   |-----------------------------------------|
-| **--output_folder**    | Path to folder where the individual band| 
-|     FOLDER_PATH        | images will be stored. Each band will be|
-|                        | stored in its own subfolder within the  |
-|                        | specified folder. Default location is   | 
-|                        | within the specified input folder.      |
-|---------------------   |-----------------------------------------|
-| **--delete_originals** |  Deletes original 5-band images after   |
-|                        |    splitting them. Useful to avoid      |
-|                        |     bloating one's hard drive."         |
+|    Command Flag                    |               Usage                     |
+| -------------------                | --------------------------------------- |
+|  **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. **Required** argument.   |
+| **--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored. Each band will be stored in its                                          own subfolder within the specified folder. Default location is the specified input folder.      |
+|     **--delete_originals**         |Deletes original 5-band images after splitting them. Useful to avoid bloating one's hard drive." |
 
 #### Examples:
 
