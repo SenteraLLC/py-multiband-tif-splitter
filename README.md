@@ -21,10 +21,10 @@ These options are as follows:
 :-------------------------------:  | :---------------------------------------: 
  **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. 
                                                       **Required** argument. 
-**--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored. 
-                                     Each band will be stored in its own subfolder within the 
+**--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored.<br> 
+                                     Each band will be stored in its own subfolder within the<br> 
                                      specified folder. Default location is the specified input folder.      
-**--delete_originals**             | Deletes original 5-band images after splitting them. 
+**--delete_originals**             | Deletes original 5-band images after splitting them.<br> 
                                        Useful to avoid bloating one's hard drive."
 
 #### Examples:
