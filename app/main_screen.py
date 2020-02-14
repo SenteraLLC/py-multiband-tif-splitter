@@ -5,6 +5,7 @@ import logging
 # For PyInstaller:
 import PySide2.QtGui
 
+from app import __version__
 from app.error_prompt import ErrHandler
 from app.finished_dialog import DoneDialog
 
@@ -22,7 +23,7 @@ class TifSelect(QWidget):
 
         self.done_dialog = None
 
-        self.setWindowTitle('Sentera Multiband Splitting Tool')
+        self.setWindowTitle('Sentera Multiband Splitting Tool (Version {})'.format(__version__))
         self.setGeometry(0, 0, 600, 400)
         frame = self.frameGeometry()
         screen_center = QDesktopWidget().availableGeometry().center()
