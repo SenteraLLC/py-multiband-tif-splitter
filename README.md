@@ -19,7 +19,7 @@ These options are as follows:
 
    Command Flag                    |               Usage                     
 :-------------------------------:  | :---------------------------------------: 
- **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. 
+ **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands.<br> 
                                                       **Required** argument. 
 **--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored.<br> 
                                      Each band will be stored in its own subfolder within the<br> 
