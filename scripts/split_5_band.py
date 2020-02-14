@@ -82,7 +82,7 @@ def split_5band_tif(input_folder, output_folder, delete_originals=False):
         raise FileNotFoundError('No TIF files present in input directory.')
 
     # Determine folder names from XMP:
-    with open(os.path.join(input_folder, random.choice(os.listdir(input_folder))), 'r', encoding='mbcs') as xmp_data_file:
+    with open(os.path.join(input_folder, random.choice(multi_band_files)), 'r', encoding='mbcs') as xmp_data_file:
         xmp_data = xmp_data_file.read()
         imager_num, band_name, central_wave, wave_fwhm = parse_xmp(xmp_data)
 

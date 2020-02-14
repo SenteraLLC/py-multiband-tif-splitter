@@ -7,14 +7,15 @@ class DoneDialog(QDialog):
     def __init__(self, parent=None):
         super(DoneDialog, self).__init__(parent)
 
-        done_label = QLabel('Splitting completed.')
+        self.done_label = QLabel('Splitting...')
 
-        ok_button = QPushButton('OK')
-        ok_button.clicked.connect(self.close_dialog)
+        self.ok_button = QPushButton('OK')
+        self.ok_button.setEnabled(False)
+        self.ok_button.clicked.connect(self.close_dialog)
 
         done_layout = QVBoxLayout()
-        done_layout.addWidget(done_label)
-        done_layout.addWidget(ok_button)
+        done_layout.addWidget(self.done_label)
+        done_layout.addWidget(self.ok_button)
         done_layout.setAlignment(Qt.AlignHCenter)
 
         self.setLayout(done_layout)
@@ -22,3 +23,7 @@ class DoneDialog(QDialog):
 
     def close_dialog(self):
         self.close()
+
+    def show_completed(self):
+        self.done_label.setText('Splitting completed.')
+        self.ok_button.setEnabled(True)

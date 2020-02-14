@@ -41,8 +41,8 @@ class TifSelect(QWidget):
 
         self.delete_check = QCheckBox('Delete Original Multiband Files')
 
-        split_button = QPushButton('Run Splitting')
-        split_button.clicked.connect(self.run_split)
+        self.split_button = QPushButton('Run Splitting')
+        self.split_button.clicked.connect(self.run_split)
 
         input_layout = QHBoxLayout()
         input_layout.addWidget(input_label)
@@ -62,7 +62,7 @@ class TifSelect(QWidget):
         menu_layout.addLayout(input_layout)
         menu_layout.addLayout(output_layout)
         menu_layout.addLayout(checkbox_layout)
-        menu_layout.addWidget(split_button)
+        menu_layout.addWidget(self.split_button)
 
         self.setLayout(menu_layout)
 
@@ -79,16 +79,23 @@ class TifSelect(QWidget):
         return
 
     def run_split(self):
+        self.split_button.setEnabled(False)
+        
         if self.delete_check.isChecked():
             delete_originals = True
         else:
             delete_originals = False
 
         try:
-            split_5band_tif(self.input_line.text(), self.output_line.text(), delete_originals)
             self.done_dialog = DoneDialog()
+            QApplication.processEvents()
+            split_5band_tif(self.input_line.text(), self.output_line.text(), delete_originals)
+            self.done_dialog.show_completed()
         except Exception as e:
             logging.error(e)
+            self.done_dialog.close()
+
+        self.split_button.setEnabled(True)
 
 
 def main():
