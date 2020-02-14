@@ -12,26 +12,34 @@ The splitting functionality in this repository can be used one of two ways:
 
 ### Script Usage:
 The "split_5_band.py" script can be called from the command line by navigating to its file location and running
-  python split_5_band.py --input_folder [--options]
+
+    python split_5_band.py --input_folder [--options]
   
 These options are as follows:
 
-|    Command Flag                    |               Usage                     |
-| -------------------------------    | --------------------------------------- |
-|  **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. **Required** argument.   |
-| **--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored. Each band will be stored in its                                          own subfolder within the specified folder. Default location is the specified input folder.      |
-| **--delete_originals**             |Deletes original 5-band images after splitting them. Useful to avoid bloating one's hard drive." |
+   Command Flag                    |               Usage                     
+:-------------------------------:  | :---------------------------------------: 
+ **--input_folder**  FOLDER_PATH   | Path to folder of 5-band .tif files to be split into individual bands. 
+                                                      **Required** argument. 
+**--output_folder**  FOLDER_PATH   | Path to folder where the individual band images will be stored. 
+                                     Each band will be stored in its own subfolder within the 
+                                     specified folder. Default location is the specified input folder.      
+**--delete_originals**             | Deletes original 5-band images after splitting them. 
+                                       Useful to avoid bloating one's hard drive."
 
 #### Examples:
 
 Split files located in current folder:
-  python split_5_band.py --input_folder .
+
+    python split_5_band.py --input_folder .
   
 Split files in separate folder, deleting original multiband files:
-  python split_5_band.py --input_folder "path/to/folder" --delete_originals
+
+    python split_5_band.py --input_folder "path/to/folder" --delete_originals
   
 Split files in separate folder, and save output files in different folder:
-  python split_5_band.py --input_folder "path/to/multiband/folder" --output_folder "path/to/output/folder"
+
+    python split_5_band.py --input_folder "path/to/multiband/folder" --output_folder "path/to/output/folder"
   
   
 ### Executable Usage:
