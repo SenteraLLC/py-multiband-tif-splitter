@@ -19,9 +19,14 @@ def _shift_bytes(idx, single_band_bytes, offset, tag_num):
             0] - offset)
 
 
-def _modify_group(idx, single_band_bytes, offset):
+def _modify_group(idx, single_band_bytes, offset, main_group=False):
     # Get number of tags in group:
     num_tags = struct.unpack('h', single_band_bytes[idx:idx+2])[0]
+
+    # Remove "Next IFD" tag:
+    if main_group:
+        single_band_bytes[(idx + 4) + ((num_tags - 1) * 12) + 10:(idx + 4) + ((num_tags - 1) * 12) + 14] = \
+            bytearray(b'\x00\x00\x00\x00')
 
     # Loop through tags and modify the byte offsets:
     for tag_num in range(num_tags):
@@ -54,7 +59,7 @@ def modify_exif_pointers(single_band_bytes, offset):
     single_band_bytes[:8] = bytearray(b'II*\x00\x08\x00\x00\x00')
 
     # First group is always directly after 8-byte header:
-    _modify_group(8, single_band_bytes, offset)
+    _modify_group(8, single_band_bytes, offset, main_group=True)
 
 
 def parse_xmp(xmp_data):
